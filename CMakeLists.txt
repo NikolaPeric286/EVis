@@ -13,3 +13,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "output")
 add_subdirectory(external/SFML)
 add_subdirectory(src)
 
+
+target_include_directories(evis PUBLIC external/SFML)
+target_link_libraries(evis PUBLIC sfml-graphics sfml-window sfml-system sfml-audio)
+
