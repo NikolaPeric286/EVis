@@ -12,7 +12,22 @@ add_subdirectory(src)
 
 if (WIN32)
     message(STATUS "Configuring SFML from precompiled binary for Windows")
+    set(SFML_DLL_DIR "${CMAKE_SOURCE_DIR}/external/SFML-Windows/SFML-2.6.2/bin")
+    set(SFML_DLLS
+        sfml-graphics-2.dll
+        sfml-window-2.dll
+        sfml-system-2.dll
+        # Add more if needed: sfml-audio-2.dll, openal32.dll, freetype.dll
+    )
 
+    # Copy each DLL to the build output folder after build
+    foreach(dll ${SFML_DLLS})
+        add_custom_command(TARGET EVisApp POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${SFML_DLL_DIR}/${dll}"
+                "$<TARGET_FILE_DIR:EVisApp>/${dll}"
+        )
+    endforeach()
     # Set SFML_DIR to point to binary CMake config
     set(SFML_DIR "${CMAKE_SOURCE_DIR}/external/SFML-Windows/SFML-2.6.2/lib/cmake/SFML")
 
