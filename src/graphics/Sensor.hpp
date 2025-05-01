@@ -22,7 +22,7 @@ public:
     bool is_new;
 private:
     sf::Vector2f last_pos;
-    const long int k = 8987500000;
+    const unsigned long long int k = 8987500000;
     const long double q = .000000000000000000160217;
     long double computeEMag(const long double& distance);
 };
