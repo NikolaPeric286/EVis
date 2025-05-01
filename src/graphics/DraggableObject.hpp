@@ -14,9 +14,12 @@ public:
     void onLeftClickPress(const float& mouse_x, const float& mouse_y);
     void onLeftClickRelease();
     void drag(const float& x, const float& y);
+    bool positive;
     bool being_dragged;
+    
 protected:
 private:
+    
     sf::Vector2f last_pos;
     
 };

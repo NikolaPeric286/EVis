@@ -2,68 +2,144 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include <vector>
 #include "ArrowShape.hpp"
 #include "DraggableObject.hpp"
+#include "SideBar.hpp"
+#include "ArrowGrid.hpp"
+#include "AssetManager.hpp"
+#include "Sensor.hpp"
+#include "Button.hpp"
+
+
 
 int main(){
+   
+    //Loads files, textures and fonts
+    FileManager::getInstance().loadFiles();
 
-    
 
-    sf::RenderWindow mainWindow(sf::VideoMode(20*32,20*32 + 100), "test", sf::Style::Close);
+    //initialises window
+    sf::RenderWindow mainWindow(sf::VideoMode(1000,800), "Electric Field Visualizer", sf::Style::Close);
     mainWindow.setFramerateLimit(60);
     mainWindow.clear(sf::Color::White);
 
-    ArrowShape test_arrow(200, 20, 50, 50, sf::Color::Red);
-  
-    test_arrow.setPosition(250,250);
     
-    sf::Texture test_texture;
-    if (!test_texture.loadFromFile("/home/nikolaperic/vscodeProjectFolders/EVis/src/assets/images/mine.png")){
-        std::cout << "ERROR!\n";
-    }
+    //initialises side bar
+    SideBar side_bar(mainWindow.getSize().y);
+    side_bar.loadFont(FileManager::getInstance().getFont());
+    side_bar.loadNegative(*FileManager::getInstance().getTexture("negative"));
+    side_bar.loadPositive(*FileManager::getInstance().getTexture("positive"));
+    
 
-    std::cout << "Texture size: " << test_texture.getSize().x << " x " << test_texture.getSize().y << "\n";
-    DraggableObject test_object(100, 100 ,test_texture);
-   
-    mainWindow.draw(test_object);
-    // test_object.setTexture(test_texture);
-    int rotation;
+    Button resetButton(70,450,100,50);
+    resetButton.loadFont(FileManager::getInstance().getFont());
+    
+    std::vector<DraggableObject> charge_vector;
+    DraggableObject* dragged_object = nullptr;
+
+    Sensor test_charge(105,390);
+    
+    //initialises grid of arrows
+    ArrowGrid::getInstance().build(sf::FloatRect(250,0,mainWindow.getSize().x - 250, mainWindow.getSize().y), 50);
     
     while (mainWindow.isOpen()){
+
         sf::Event event;
         while (mainWindow.pollEvent(event)){
 
             
             if (event.type == sf::Event::Closed){
+                std::cout << "Window Closing\n";
+                FileManager::getInstance().clear();
                 mainWindow.close();
-                
+                return EXIT_SUCCESS;
             }
-            if (event.type == sf::Event::MouseButtonPressed){
+            else if (event.type == sf::Event::MouseButtonPressed){
 
                 if (event.mouseButton.button == sf::Mouse::Left){
-                    test_object.onLeftClickPress(event.mouseButton.x, event.mouseButton.y);
+                    test_charge.onLeftClickPress(event.mouseButton.x, event.mouseButton.y);
+                    side_bar.checkClick(event.mouseButton.x, event.mouseButton.y, charge_vector);
+                    for(auto it = charge_vector.begin(); it != charge_vector.end(); it++){
+                        it->onLeftClickPress(event.mouseButton.x, event.mouseButton.y);
+                        if(it->being_dragged){
+                            dragged_object = &(*it);
+                        }
+                    }
+
+                    if(resetButton.onLeftClick(event.mouseButton.x, event.mouseButton.y)){
+                        charge_vector.clear();
+                        test_charge.reset();
+                    }
+
+                    
+                    
                 }
             }
-            if(event.type == sf::Event::MouseButtonReleased){
+            else if(event.type == sf::Event::MouseButtonReleased){
                 if(event.mouseButton.button == sf::Mouse::Left){
-                    test_object.onLeftClickRelease();
+                    if(event.mouseButton.button == sf::Mouse::Left){
+                        if(dragged_object != nullptr){
+                            dragged_object->onLeftClickRelease();
+                            dragged_object = nullptr;
+                        }
+                        if(test_charge.being_dragged){
+                            test_charge.onLeftClickRelease();
+                        }
+                    }
                 }
             }
         }
 
 
-        if( test_object.being_dragged){
-            test_object.drag(sf::Mouse::getPosition(mainWindow).x, sf::Mouse::getPosition(mainWindow).y);
+        if(dragged_object!= nullptr && dragged_object->being_dragged){
+            dragged_object->drag(sf::Mouse::getPosition(mainWindow).x, sf::Mouse::getPosition(mainWindow).y);
         }
 
-
-        rotation = (rotation >=360)? 0: rotation + 1; 
-        test_arrow.setRotation(rotation);
-
-        mainWindow.clear(sf::Color::White);
-        mainWindow.draw(test_object);
+        if(test_charge.being_dragged ){
+            test_charge.drag(sf::Mouse::getPosition(mainWindow).x, sf::Mouse::getPosition(mainWindow).y);
+        }
         
-        mainWindow.draw(test_arrow);
+        
+        for(size_t i = 0; i < charge_vector.size(); i++){
+            float x = charge_vector.at(i).getPosition().x;
+            float y = charge_vector.at(i).getPosition().y;
+            if(!charge_vector.at(i).being_dragged && (x < 250 || x+5 > mainWindow.getSize().x || y < 0 || y+5 > mainWindow.getSize().y)){
+                charge_vector.erase(charge_vector.begin() + i);
+            }
+        }
+
+        
+        mainWindow.clear(sf::Color{47, 44, 48, 255});
+        if(!test_charge.is_new){
+            test_charge.updateSensor(charge_vector);
+            test_charge.update();
+            mainWindow.draw(test_charge);
+        }
+        
+        side_bar.render(mainWindow);
+        resetButton.render(mainWindow);
+        ArrowGrid::getInstance().update(charge_vector);
+        ArrowGrid::getInstance().renderGrid(mainWindow);
+        for(auto it = charge_vector.begin(); it != charge_vector.end(); it++){
+            mainWindow.draw(*it);
+        }
+        
+        if(test_charge.is_new){
+            
+            mainWindow.draw(test_charge);
+        }
+
+        if(!test_charge.is_new && !test_charge.being_dragged ){
+            float x = test_charge.getPosition().x;
+            float y = test_charge.getPosition().y;
+            if(x < 250 || x > mainWindow.getSize().x || y < 0 || y > mainWindow.getSize().y){
+                test_charge.reset();
+            }
+        }
+        
+        
+        
         mainWindow.display();
     }
 
@@ -71,3 +147,5 @@ int main(){
 
     return EXIT_SUCCESS;
 }
+
+

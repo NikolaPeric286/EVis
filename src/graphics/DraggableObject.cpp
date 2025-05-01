@@ -18,7 +18,7 @@ being_dragged(false){
 void DraggableObject::onLeftClickPress(const float& mouse_x, const float& mouse_y){
     sf::FloatRect bounds_rect = getGlobalBounds();
     if (bounds_rect.contains(mouse_x, mouse_y)){
-        std::cout << "object clicked\n";
+        
         being_dragged = true;
     }
 }   
