@@ -27,6 +27,10 @@ public:
 protected:
     float shaft_length;
 private:
+    // this value determines if it pivots
+    // around the center or the end
+    // usefull for distinguishing between regular grid arrows
+    // and the test charge
     bool center_pivot;
     sf::Color arrow_color;
     sf::VertexArray arrow_array;
