@@ -62,8 +62,6 @@ int main(){
             else if (event.type == sf::Event::MouseButtonPressed){
 
                 if (event.mouseButton.button == sf::Mouse::Left){
-                    //checks click for test charge
-                    test_charge.onLeftClickPress(event.mouseButton.x, event.mouseButton.y);
                     
                     // checks click for charges on the side bar, adds a new charge if user
                     // picks one up
@@ -75,9 +73,12 @@ int main(){
                         it->onLeftClickPress(event.mouseButton.x, event.mouseButton.y);
                         if(it->being_dragged){
                             dragged_object = &(*it);
+                            goto click_break;
                         }
                     }
-
+                    //checks click for test charge
+                    test_charge.onLeftClickPress(event.mouseButton.x, event.mouseButton.y);
+                    
                     // reset button activation
                     if(resetButton.onLeftClick(event.mouseButton.x, event.mouseButton.y)){
                         charge_vector.clear();
@@ -85,7 +86,9 @@ int main(){
                     }
 
                     
+
                     
+                    click_break:
                 }
             }
             // releases dragged objects
