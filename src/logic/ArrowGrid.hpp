@@ -26,10 +26,10 @@ public:
 private:
     ArrowGrid(){}
     // constants
-    const long int k = 8987500000;
-    const long double q = .000000000000000000160217;
+    const unsigned long long int k = 8987500000;
+    const  long double q = .000000000000000000160217;
 
-    
+
     long double computeEMag(const long double& distance);
     std::vector<std::vector<ArrowShape>> arrow_vector;
 
