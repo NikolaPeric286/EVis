@@ -31,10 +31,11 @@ cmake ..
 make -j2
 cd ../output
 ./evis
-🪟 Windows (MinGW + Ninja)
-bash
-Copy
-Edit
+```
+
+### 🪟 Windows (MinGW + Ninja)
+```bash
+
 git clone https://github.com/NikolaPeric286/EVis
 cd EVis
 mkdir build
@@ -43,4 +44,5 @@ cmake .. -G "Ninja" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
 ninja
 cd ../output
 ./evis.exe
+```
 ⚠️ Ensure SFML libraries are correctly placed in external/SFML-Windows/ with proper include/, lib/, and bin/ folders. See the documentation for more details.
