@@ -6,7 +6,7 @@
 #include "DraggableObject.hpp"
 
 
-
+//singleton class
 class ArrowGrid{
 
 public:
@@ -17,15 +17,19 @@ public:
         static ArrowGrid arrowGrid_instance = ArrowGrid();
         return arrowGrid_instance;
     }
+    //initalises grid of arrows
     void build(const sf::FloatRect& space_rect, const float& spacing);
+    //upates arrow values based off of charges
     void update(std::vector<DraggableObject>& charge_vector);
-
+    //renders grid of arrows
     void renderGrid(sf::RenderWindow& window);
 private:
     ArrowGrid(){}
-    
+    // constants
     const long int k = 8987500000;
     const long double q = .000000000000000000160217;
+
+    
     long double computeEMag(const long double& distance);
     std::vector<std::vector<ArrowShape>> arrow_vector;
 

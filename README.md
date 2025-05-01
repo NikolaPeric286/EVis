@@ -45,4 +45,3 @@ ninja
 cd ../output
 ./evis.exe
 ```
-⚠️ Ensure SFML libraries are correctly placed in external/SFML-Windows/ with proper include/, lib/, and bin/ folders. See the documentation for more details.

@@ -9,6 +9,8 @@
 #include <fstream>
 
 // singleton class
+// this class is largely adapted
+// from the minesweeper project
 class FileManager{
 
 public:

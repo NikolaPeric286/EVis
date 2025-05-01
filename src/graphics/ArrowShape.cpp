@@ -8,8 +8,7 @@ ArrowShape::ArrowShape(float _shaft_length, float _shaftThickness,float _head_le
   scale_factor(1),
   x_component(0),
   y_component(0),
-  center_pivot(_center_pivot)
-  {
+  center_pivot(_center_pivot){
     
     arrow_array.setPrimitiveType(sf::Triangles);
     

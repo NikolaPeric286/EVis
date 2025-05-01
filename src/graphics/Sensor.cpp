@@ -9,6 +9,13 @@ Sensor::Sensor(const float& x_pos, const float& y_pos) : ArrowShape(20,5,10,10, 
 }
 
 void Sensor::updateSensor(std::vector<DraggableObject>& charge_vector){
+    // the code here is very messy but pretty much the same principles as the
+    // update function in ArrowShape
+    // The arrow system could probably be redone to allow this to inherit from the arrow
+    // and also DraggableObject
+    // 
+
+    
     getXComp() = 0;
     getYComp() = 0;
     for(auto it_charge = charge_vector.begin(); it_charge != charge_vector.end(); it_charge++){
