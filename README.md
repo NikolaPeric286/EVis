@@ -19,8 +19,13 @@ To create a visual learning aid for physics and engineering students by:
 
 ## 🛠️ Building Instructions
 
-## Dependency installs
 
+
+
+
+### 🔧 Linux
+
+#### Dependency installs
 ```bash
 sudo apt update && sudo apt install \
      libxrandr-dev \
@@ -40,7 +45,6 @@ sudo apt update && sudo apt install \
      libgbm-dev
 ```
 
-### 🔧 Linux
 
 ```bash
 git clone https://github.com/NikolaPeric286/EVis
