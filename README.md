@@ -19,13 +19,18 @@ To create a visual learning aid for physics and engineering students by:
 
 ## 🛠️ Building Instructions
 
-# Dependency installs
+## Dependency installs
 
 ```bash
 sudo apt update && sudo apt install \
      libxrandr-dev \
      libxcursor-dev \
      libxi-dev \
+     libxss-dev \
+     libxxf86vm-dev \
+     libxkbfile-dev  \
+     libxv-dev \
+     libx11-dev \
      libudev-dev \
      libflac-dev \
      libvorbis-dev \
@@ -40,7 +45,10 @@ sudo apt update && sudo apt install \
 ```bash
 git clone https://github.com/NikolaPeric286/EVis
 cd EVis
-git submodule update --init
+
+if SFML is not installed on your system:
+git submodule update --init 
+
 mkdir build
 cd build
 cmake ..
