@@ -24,7 +24,7 @@ if(WIN32)
         ${SFML_LIB_DIR}/libsfml-graphics.a
         ${SFML_LIB_DIR}/libsfml-window.a
         ${SFML_LIB_DIR}/libsfml-system.a
-        ${SFML_LIB_DIR}/libsfml-audio.a
+
     )
 
     target_link_libraries(evis PRIVATE

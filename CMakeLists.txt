@@ -13,9 +13,21 @@ include_directories(${CMAKE_SOURCE_DIR}/external/SFML-Windows/SFML-2.6.2/include
 add_subdirectory(src)
 
 if(UNIX)
-    message("Compiling SFML from source on Linux")
-    add_subdirectory(external/SFML)
-    target_link_libraries(evis PUBLIC sfml-graphics sfml-window sfml-system sfml-audio)
+    message("Platform: Linux")
+    find_package(SFML 2.5 COMPONENTS graphics window system audio)
+
+    if(SFML_FOUND)
+        message("SFML Found")
+    else()
+        message("SFML Not found, Compiling SFML from source on Linux")
+        
+        set(SFML_BUILD_NETWORK FALSE)
+        set(SFML_BUILD_AUDIO FALSE)
+        add_subdirectory(external/SFML)
+        
+    endif()
+    
+    target_link_libraries(evis PUBLIC sfml-graphics sfml-window sfml-system)
 endif()
 
 
