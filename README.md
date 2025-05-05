@@ -34,6 +34,7 @@ sudo apt update && sudo apt install \
      libxss-dev \
      libxxf86vm-dev \
      libxkbfile-dev  \
+     libfreetype6-dev
      libxv-dev \
      libx11-dev \
      libudev-dev \
